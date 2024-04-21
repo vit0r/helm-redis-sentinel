@@ -1,0 +1,51 @@
+global:
+  storageClass: nfs
+architecture: replication
+auth:
+  enabled: true
+  sentinel: false
+  existingSecret: "redis-password"
+  existingSecretPasswordKey: "REDIS_PASSWORD"
+sentinel:
+  enabled: true
+  masterSet: local
+  automateClusterRecovery: true
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 400m
+    limits:
+      memory: 1Gi
+      cpu: 800m
+  persistence:
+    enabled: true
+    size: 50Gi
+  service:
+    type: NodePort
+    nodePorts:
+      sentinel: 30300
+      redis: 30400
+replica:
+  disableCommands: []
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 400m
+    limits:
+      memory: 1Gi
+      cpu: 800m
+  persistence:
+    enabled: true
+    size: 50Gi
+master:
+  disableCommands: []
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 400m
+    limits:
+      memory: 1Gi
+      cpu: 800m
+  persistence:
+    enabled: true
+    size: 50Gi

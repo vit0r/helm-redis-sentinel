@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-sentinel
+spec:
+  selector:
+    matchLabels:
+      service: node-sentinel
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: node-sentinel
+    spec:
+      containers:
+        - image: vit0r/node-sentinel:latest
+          imagePullPolicy: Always
+          name: node-sentinel
+          env:
+            - name: CLUSTER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: CLUSTER_NAME
+                  name: node-sentinel
+            - name: REDIS_SENTINELS
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_SENTINELS
+                  name: node-sentinel
+            - name: REDIS_DB_NUMBER
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_DB_NUMBER
+                  name: node-sentinel
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_PASSWORD
+                  name: node-sentinel
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      restartPolicy: Always
