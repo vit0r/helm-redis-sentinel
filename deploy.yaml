@@ -1,42 +1,96 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-sentinel
+  name: node-sentinel-nodejs
 spec:
   selector:
     matchLabels:
-      service: node-sentinel
+      service: node-sentinel-nodejs
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        service: node-sentinel
+        service: node-sentinel-nodejs
     spec:
       containers:
-        - image: vit0r/node-sentinel:latest
+        - image: vit0r/node-sentinel-nodejs:latest
           imagePullPolicy: Always
-          name: node-sentinel
+          name: node-sentinel-nodejs
           env:
             - name: CLUSTER_NAME
               valueFrom:
                 configMapKeyRef:
                   key: CLUSTER_NAME
-                  name: node-sentinel
+                  name: node-sentinel-nodejs
             - name: REDIS_SENTINELS
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_SENTINELS
-                  name: node-sentinel
+                  name: node-sentinel-nodejs
             - name: REDIS_DB_NUMBER
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_DB_NUMBER
-                  name: node-sentinel
+                  name: node-sentinel-nodejs
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: REDIS_PASSWORD
+                  name: node-sentinel
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-sentinel-java-consoleapp
+spec:
+  selector:
+    matchLabels:
+      service: node-sentinel-java-consoleapp
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: node-sentinel-java-consoleapp
+    spec:
+      containers:
+        - image: vit0r/node-sentinel-java-consoleapp:latest
+          imagePullPolicy: Always
+          name: node-sentinel-java-consoleapp
+          env:
+            - name: MASTER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: MASTER_NAME
+                  name: node-sentinel-java-consoleapp
+            - name: REDIS_SENTINELS
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_SENTINELS
+                  name: node-sentinel-java-consoleapp
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE
+                  name: node-sentinel-java-consoleapp
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_PASSWORD
+                  name: node-sentinel
+            - name: REDIS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_USERNAME
                   name: node-sentinel
           resources:
             limits:

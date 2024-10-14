@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toolbox
+spec:
+  selector:
+    matchLabels:
+      service: toolbox
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: toolbox
+    spec:
+      containers:
+        - image: vit0r/toolbox:latest
+          imagePullPolicy: Always
+          name: toolbox
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      restartPolicy: Always

@@ -1,9 +1,15 @@
 # node-sentinel
 
+## create kind cluster
+
+```console
+kind create cluster --name mycluster --config kind-cluster.yaml
+```
+
 ## helm install redis
 
 ```console
-helm upgrade -i redis-sentinel bitnami/redis -n redis --create-namespace -f redis-values.yml
+helm upgrade -i redis-sentinel bitnami/redis -n redis --create-namespace -f redis-values.yaml
 ```
 
 ## deploy

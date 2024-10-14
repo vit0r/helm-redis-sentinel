@@ -13,7 +13,7 @@ const redis = new Redis({
     sentinels: sentinels,
     name: process.env.CLUSTER_NAME,
     password: process.env.REDIS_PASSWORD,
-    // sentinelPassword: process.env.REDIS_PASSWORD, # if sentinel auth enabled
+    sentinelPassword: process.env.REDIS_PASSWORD,
     db: process.env.REDIS_DB_NUMBER
 });
 
